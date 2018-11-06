@@ -1,4 +1,18 @@
-.carsList {
-    border: 1px solid #000;
+.controls {
+    overflow: auto;
     padding: 15px;
 }
+
+.list-holder {
+    padding: 15px;
+    text-align: center;
+    /* transition: box-shadow 1s ease-out; */
+}
+
+form {
+    margin: 15px;
+}
+
+/* .list-holder.flash {
+    box-shadow: inset #F4B2B7 0 5px 5px, inset #F4B2B7 100% 100% 5px 5px;
+} */

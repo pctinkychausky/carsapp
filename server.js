@@ -25,7 +25,18 @@ promise.then(function(db) {
 
 var Schema = mongoose.Schema;
 var carSchema = new Schema({
-    name: String
+    name: {
+        type: String,
+        required: true
+    },
+    bhp: {
+        type: Number,
+        required: true
+    },
+    avatar_url: {
+        type: String,
+        required: true
+    }
 });
 
 var Car = mongoose.model('Car', carSchema);
@@ -65,7 +76,7 @@ app.put('/cars/:id', (req, res) => {
         if (err) {
             return res.status(500).send(err);
         }
-        res.sendStatus(200);
+        res.status(200).send(result);
     });
 });
 
