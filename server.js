@@ -5,6 +5,10 @@ var mongoose = require('mongoose');
 const app = express();
 const PORT = 3333;
 
+const {
+    MONGODB_URI
+} = process.env;
+
 app.use(express.static('public'));
 
 // parse application/x-www-form-urlencoded
@@ -14,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 mongoose.Promise = global.Promise;
-var promise = mongoose.connect('mongodb://localhost/first_servers', { useNewUrlParser: true });
+var promise = mongoose.connect(MONGODB_URI || 'mongodb://localhost/first_servers', { useNewUrlParser: true });
 
 promise.then(function(db) {
   console.log('DATABASE CONNECTED!!');
