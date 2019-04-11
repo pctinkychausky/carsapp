@@ -47,6 +47,10 @@ var Car = mongoose.model('Car', carSchema);
 // /cars
 // /cars/78asd6f8s6d9
 
+app.get('/twitter', function(req, res){
+    //
+})
+
 app.get('/cars/:id?', (req, res) => {
     var query = {};
     var id = req.params.id;
