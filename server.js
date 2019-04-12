@@ -9,6 +9,8 @@ const {
     MONGODB_URI
 } = process.env;
 
+// const MONGODB_URI = process.env.MONGODB_URI
+
 app.use(express.static('public'));
 
 // parse application/x-www-form-urlencoded
@@ -21,9 +23,9 @@ mongoose.Promise = global.Promise;
 var promise = mongoose.connect(MONGODB_URI || 'mongodb://localhost/first_servers', { useNewUrlParser: true });
 
 promise.then(function(db) {
-  console.log('DATABASE CONNECTED!!');
+    console.log('DATABASE CONNECTED!!');
 }).catch(function(err){
-  console.log('CONNECTION ERROR', err);
+    console.log('CONNECTION ERROR', err);
 });
     
 
