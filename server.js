@@ -82,6 +82,7 @@ app.post('/cars', (req, res) => {
 });
 
 app.put('/cars/:id', (req, res) => {
+    console.log(`Updating ${req.params.id}`, req.body);
     Car.updateOne({ _id: req.params.id }, req.body, function(err, result){
         if (err) {
             return res.status(500).send(err);
@@ -92,7 +93,7 @@ app.put('/cars/:id', (req, res) => {
 
 
 app.delete('/cars/:id', (req, res) => {
-    console.log('newCar', req.params.id);
+    console.log('carToBeDeleted', req.params.id);
     Car.deleteOne({ _id: req.params.id }, function(err){
         if (err) {
             return res.status(500).send(err);
