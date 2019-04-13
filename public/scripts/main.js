@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function() {
   const tabs = document.querySelectorAll(".tabs")[0];
   const instance = M.Tabs.init(tabs, {});
 
+  const updateTabTrigger = document.getElementById('updateTabTrigger');
+
   // Find DOM Nodes
   const listNode = document.getElementById("mountNode");
 
@@ -98,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
         this.reset();
         M.toast({ html: "Car Updated!", classes: "success" });
         reloadList();
+        updateTabTrigger.parentNode.classList.add('disabled');
       })
       .catch(err => {
         console.log(error);
@@ -105,7 +108,6 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   });
   function updateCar(id) {
-    const updateTabTrigger = document.getElementById('updateTabTrigger');
     updateTabTrigger.parentNode.classList.remove('disabled');
     instance.select('updateTab');
     console.log(updateForm, updateForm.querySelectorAll('#id'));
