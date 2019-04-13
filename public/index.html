@@ -33,20 +33,20 @@
         <div class="col s12">
           <ul class="tabs">
             <li class="tab col s4">
-              <a href="#test1" class="active">List</a>
+              <a id="listTabTrigger" href="#listTab" class="active">List</a>
             </li>
             <li class="tab col s4">
-              <a href="#test2">Add Car</a>
+              <a id="addTabTrigger" href="#addTab">Add Car</a>
             </li>
-            <li class="tab col s4">
-              <a href="#test3">Update Car</a>
+            <li class="tab col s4 disabled">
+              <a id="updateTabTrigger" href="#updateTab">Update Car</a>
             </li>
           </ul>
         </div>
-        <div id="test1" class="col s12 tab-content">
+        <div id="listTab" class="col s12 tab-content">
           <div id="mountNode"></div>
         </div>
-        <div id="test2" class="col s12 tab-content">
+        <div id="addTab" class="col s12 tab-content">
           <div class="row">
             <form class="col s12" id="addForm" name="addForm">
               <div class="row">
@@ -82,7 +82,7 @@
             </form>
           </div>
         </div>
-        <div id="test3" class="col s12 tab-content">
+        <div id="updateTab" class="col s12 tab-content">
             <div class="row">
                 <form class="col s12" id="updateForm" name="updateForm">
                   <div class="row">
@@ -134,11 +134,11 @@
                     <dd>{{bhp}}</dd>
                   </dl>
                   <div class="controls">
-                    <button class="btn btn-info update">
+                    <button class="btn btn-info update" data-id="{{_id}}">
                         <i class="material-icons left">edit</i>
                         Edit
                     </button>
-                    <button class="btn btn-info delete">
+                    <button class="btn btn-info delete" data-id="{{_id}}">
                         <i class="material-icons left">delete</i>
                         Delete
                     </button>
