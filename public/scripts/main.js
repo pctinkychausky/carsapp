@@ -41,15 +41,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
   listNode.addEventListener("click", function(e) {
     // console.log('click', e.target);
-    if (e.currentTarget) {
-      const id = e.currentTarget.dataset.id;
+
+    if (e.target) {
+      const _target = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
+      const id = _target.dataset.id;
       console.log("id", id);
-      if (e.currentTarget.matches("button.update")) {
+      if (_target.matches("button.update")) {
         // update
         console.log("update");
         updateCar(id);
 
-      } else if (e.currentTarget.matches("button.delete")) {
+      } else if (_target.matches("button.delete")) {
         // delete
         console.log("delete");
         deleteCar(id);
@@ -116,6 +118,12 @@ document.addEventListener("DOMContentLoaded", function() {
       return car._id === id;
     });
     populateForm(updateForm, carToBeUpdated);
+    M.updateTextFields();
+    // const firstTextInput = updateForm.querySelectorAll('input[type="text"]')[0];
+    // console.log('firstTextInput', firstTextInput);
+    // updateForm.querySelectorAll('input[type="text"]')[0].focus({
+    //   preventScroll: true
+    // });
   }
 
   // Add FORM
