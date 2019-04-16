@@ -41,15 +41,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
   listNode.addEventListener("click", function(e) {
     // console.log('click', e.target);
-    if (e.target) {
-      const id = e.target.dataset.id;
+    if (e.currentTarget) {
+      const id = e.currentTarget.dataset.id;
       console.log("id", id);
-      if (e.target.matches("button.update")) {
+      if (e.currentTarget.matches("button.update")) {
         // update
         console.log("update");
         updateCar(id);
 
-      } else if (e.target.matches("button.delete")) {
+      } else if (e.currentTarget.matches("button.delete")) {
         // delete
         console.log("delete");
         deleteCar(id);
