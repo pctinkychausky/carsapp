@@ -1,9 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const app = express();
 const PORT = process.env.PORT || 3333;
+const apiRoot = '/api/';
+const version = 'v1';
+const fullAPIRoot = apiRoot + version;
 
 const {
     MONGODB_URI
@@ -20,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 mongoose.Promise = global.Promise;
-var promise = mongoose.connect(MONGODB_URI || 'mongodb://localhost/first_servers', { useNewUrlParser: true });
+const promise = mongoose.connect(MONGODB_URI || 'mongodb://localhost/cars_jump', { useNewUrlParser: true });
 
 promise.then(function(db) {
     console.log('DATABASE CONNECTED!!');
@@ -29,8 +32,8 @@ promise.then(function(db) {
 });
     
 
-var Schema = mongoose.Schema;
-var carSchema = new Schema({
+const Schema = mongoose.Schema;
+const carSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -41,11 +44,11 @@ var carSchema = new Schema({
     },
     avatar_url: {
         type: String,
-        required: true
+        default: 'https://static.thenounproject.com/png/449586-200.png'
     }
 });
 
-var Car = mongoose.model('Car', carSchema);
+const Car = mongoose.model('Car', carSchema);
 
 // GET /cars - get all the cars
 // GET /cars/:id //--- /cars/Bugatti%20Veyron
@@ -53,11 +56,7 @@ var Car = mongoose.model('Car', carSchema);
 // /cars
 // /cars/78asd6f8s6d9
 
-app.get('/twitter', function(req, res){
-    //
-})
-
-app.get('/cars/:id?', (req, res) => {
+app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
     var query = {};
     var id = req.params.id;
     if (id) {
@@ -69,7 +68,7 @@ app.get('/cars/:id?', (req, res) => {
     });
 });
 
-app.post('/cars', (req, res) => {
+app.post(`${fullAPIRoot}/cars`, (req, res) => {
     var newCar = req.body;
     console.log('newCar', newCar);
     var car = new Car(newCar);
@@ -81,7 +80,7 @@ app.post('/cars', (req, res) => {
     });
 });
 
-app.put('/cars/:id', (req, res) => {
+app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
     console.log(`Updating ${req.params.id}`, req.body);
     Car.updateOne({ _id: req.params.id }, req.body, function(err, result){
         if (err) {
@@ -92,7 +91,7 @@ app.put('/cars/:id', (req, res) => {
 });
 
 
-app.delete('/cars/:id', (req, res) => {
+app.delete(`${fullAPIRoot}/cars/:id`, (req, res) => {
     console.log('carToBeDeleted', req.params.id);
     Car.deleteOne({ _id: req.params.id }, function(err){
         if (err) {

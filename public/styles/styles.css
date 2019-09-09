@@ -7,6 +7,11 @@ header  h1 {
   font-size: 4rem;
 }
 
+.avatar img {
+  width: 100px;
+  height: 100px;
+}
+
 .tab-display {
   border: 1px solid #000;
   margin-top: 50px;
@@ -47,3 +52,6 @@ header  h1 {
 .collection:empty {
   border: none;
 }
+/* [required]::after {
+  content: 
+} */

@@ -44,7 +44,7 @@
           </ul>
         </div>
         <div id="listTab" class="col s12 tab-content">
-          <div id="mountNode"></div>
+          <div id="carsList"></div>
         </div>
         <div id="addTab" class="col s12 tab-content">
           <div class="row">
@@ -57,21 +57,29 @@
                     id="name"
                     type="text"
                     class="validate"
-                  />
+                    required
+                  >
                   <label for="first_name">Name</label>
                 </div>
                 <div class="input-field col s12">
-                  <input id="bhp" type="number" class="validate" placeholder="bhp" name="bhp" />
+                  <input
+                    id="bhp"
+                    type="number"
+                    class="validate"
+                    placeholder="bhp"
+                    name="bhp"
+                  >
                   <label for="bhp">BHP</label>
                 </div>
                 <div class="input-field col s12">
                     <input
-                        placeholder="Avatar URL"
-                        name="avatar_url"
-                        id="avatar"
-                        type="text"
-                        class="validate"
-                    />
+                      placeholder="Avatar URL"
+                      name="avatar_url"
+                      id="avatar"
+                      type="text"
+                      class="validate"
+                      required
+                    >
                     <label for="avatar">Avatar</label>
                     </div>
                 </div>
@@ -122,7 +130,7 @@
       </div>
     </div>
 
-    <script id="my_template" type="text/x-handlebars-template">
+    <!-- <script id="my_template" type="text/x-handlebars-template">
       <div>
         <ul id="carsList" class="collection carsList">
             {{#each cars}}
@@ -148,7 +156,7 @@
             {{/each}}
         </ul>
       </div>
-    </script>
+    </script> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"></script>
     <!-- Compiled and minified JavaScript -->
