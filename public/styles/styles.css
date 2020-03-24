@@ -45,7 +45,8 @@ header h1 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  border-bottom: #eee;
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
 }
 
 .collection-item:last-child {
@@ -69,6 +70,7 @@ header h1 {
 .collection-item dt {
   clear: left;
   font-weight: bold;
+  min-width: 75px;
 }
 
 .tab-display .tab-content {
