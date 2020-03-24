@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
   // Instantiate Tabs
-  const tabs = document.querySelectorAll(".tabs")[0];
+  const tabs = document.querySelector(".tabs");
   const instance = M.Tabs.init(tabs, {});
 
-  const updateTabTrigger = document.getElementById('updateTabTrigger');
+  const updateTabTrigger = document.getElementById("updateTabTrigger");
 
   // Find DOM Nodes
   const listNode = document.getElementById("carsList");
@@ -14,12 +14,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
   let _cars = [];
 
-  const apiRoot = '/api/';
-  const version = 'v1';
+  const apiRoot = "/api/";
+  const version = "v1";
   const fullAPIRoot = apiRoot + version;
 
   // Load cars function so you can call repeatedly
-  function loadCars(handler=renderCarsList) {
+  function loadCars(handler = renderCarsList) {
     fetch(`${fullAPIRoot}/cars`, {
       method: "GET",
       headers: {
@@ -36,18 +36,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function renderCarsList(cars) {
     if (!cars.length) {
-      const noCarsMessage = document.createElement('p');
-      noCarsMessage.textContent = 'No Cars to display';
+      const noCarsMessage = document.createElement("p");
+      noCarsMessage.classList.add("no-items-message");
+      noCarsMessage.textContent = "No Cars to display";
+      listNode.innerHTML = "";
       listNode.append(noCarsMessage);
       return;
     }
-    const ul = document.createElement('ul');
-    
+    const ul = document.createElement("ul");
+
     // object.entries() returns an array like [[0, 'thing1'], [1, 'thing2']]
     for (let [index, car] of cars.entries()) {
       // console.log("car", car);
       // console.log("index", index);
-      
+
       // Create the li
       const li = document.createElement("li");
       li.classList.add("collection-item", "avatar");
@@ -87,43 +89,43 @@ document.addEventListener("DOMContentLoaded", function() {
   listNode.addEventListener("click", function(e) {
     const target = e.target;
     if (target) {
-      if(target.matches("button.update")){
+      if (target.matches("button.update")) {
         console.log("update", target);
-        updateCar(getDataAttributeValue(target, 'id'));
-      } else if(target.matches("button.delete")) {
+        updateCar(getDataAttributeValue(target, "id"));
+      } else if (target.matches("button.delete")) {
         console.log("delete");
-        deleteCar(getDataAttributeValue(target, 'id'));
+        deleteCar(getDataAttributeValue(target, "id"));
       }
     }
   });
 
   function reloadList() {
     loadCars();
-    instance.select('listTab');
+    instance.select("listTab");
   }
 
   function getDataAttributeValue(node, field) {
     const data = node.dataset[field];
-    if(!data) throw new Error(`No id was found on DOM node`);
+    if (!data) throw new Error(`No id was found on DOM node`);
     return data;
   }
 
   function getFormData(form) {
-    if (!form) throw new Error('No form provided to getFormData method');
+    if (!form) throw new Error("No form provided to getFormData method");
     return Object.fromEntries(new FormData(form));
   }
 
   function deleteCar(id) {
     fetch(`${fullAPIRoot}/cars/${id}`, {
-      method: 'DELETE'
+      method: "DELETE"
     })
       .then(resp => {
-        console.log('resp', resp);
+        console.log("resp", resp);
         M.toast({ html: "Car Deleted!", classes: "success" });
         loadCars();
       })
       .catch(err => {
-        console.log('err', err);
+        console.log("err", err);
         M.toast({ html: `Error: ${err.message}`, classes: "error" });
       });
   }
@@ -132,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
   updateForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const data = getFormData(updateForm)
+    const data = getFormData(updateForm);
 
     // return;
     fetch(`${fullAPIRoot}/cars/${data.id}`, {
@@ -147,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function() {
         this.reset();
         M.toast({ html: "Car Updated!", classes: "success" });
         reloadList();
-        updateTabTrigger.parentNode.classList.add('disabled');
+        updateTabTrigger.parentNode.classList.add("disabled");
       })
       .catch(err => {
         console.log(error);
@@ -157,19 +159,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function updateCar(id) {
     // undisable and select tab
-    updateTabTrigger.parentNode.classList.remove('disabled');
-    instance.select('updateTab');
+    updateTabTrigger.parentNode.classList.remove("disabled");
+    instance.select("updateTab");
 
     // Find car by Id
     const carToBeUpdated = _cars.find(car => {
-      console.log(car._id, id)
+      console.log(car._id, id);
       return car._id === id;
     });
-    if(!carToBeUpdated) throw new Error(`Car not found for id: ${id}`);
+    if (!carToBeUpdated) throw new Error(`Car not found for id: ${id}`);
 
     // Insert id value in hidden id field
     // console.log(updateForm, updateForm.querySelector('#id'));
-    updateForm.querySelector('#id').value = id;
+    updateForm.querySelector("#id").value = id;
 
     // Populate the form
     populateForm(updateForm, carToBeUpdated);
@@ -184,8 +186,8 @@ document.addEventListener("DOMContentLoaded", function() {
     e.preventDefault();
 
     // Get the data from the form
-    const data = getFormData(addForm)
-    console.log('data', data);
+    const data = getFormData(addForm);
+    console.log("data", data);
 
     // Make the call
     fetch(`${fullAPIRoot}/cars`, {
@@ -207,11 +209,6 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   });
 
-
-
-
-
-
   // Form Utility functions
   function populateForm(form, data) {
     for (const item in data) {
@@ -221,37 +218,6 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   }
-
-  
-function serializeFormToArray (form) {
-    var field, l, s = [];
-    if (typeof form === 'object' && form.nodeName === "FORM") {
-        var len = form.elements.length;
-        for (let i=0; i<len; i++) {
-            field = form.elements[i];
-            if (field.name && !field.disabled && field.type !== 'file' && field.type !== 'reset' && field.type !== 'submit' && field.type !== 'button') {
-                if (field.type === 'select-multiple') {
-                    l = form.elements[i].options.length; 
-                    for (let j=0; j<l; j++) {
-                        if(field.options[j].selected)
-                            s[s.length] = { name: field.name, value: field.options[j].value };
-                    }
-                } else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
-                    if (field.type === 'number') {
-                        s[s.length] = { name: field.name, value: Number(field.value) };
-                    } else {
-                        s[s.length] = { name: field.name, value: field.value };
-                    } 
-                } else {
-                  let bool = false;
-                  if (field.checked) bool = true;
-                  s[s.length] = { name: field.name, value: bool }
-                }
-            }
-        }
-    }
-    return s;
-};
 
   // Running order
   loadCars();

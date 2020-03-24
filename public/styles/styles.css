@@ -1,15 +1,27 @@
-.nav-wrapper .container {
-  /* padding: 15px 0; */
+/* .nav-wrapper .container {
+  /* padding: 15px 0; 
+} */
+
+header h1 {
+  margin-top: 0;
+  font-size: 3rem;
+}
+@media screen and (min-width: 600px) {
+  header h1 {
+    margin-top: 0;
+    font-size: 3.7rem;
+  }
 }
 
-header  h1 {
-  margin-top: 0;
-  font-size: 4rem;
+.no-items-message {
+  text-align: center;
 }
 
 .avatar img {
   width: 100px;
   height: 100px;
+  margin-right: 1em;
+  object-fit: cover;
 }
 
 .tab-display {
@@ -19,24 +31,42 @@ header  h1 {
 
 .tabs {
   border-bottom: 1px solid #000;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  width: calc(100% + calc(0.75rem * 2));
+  box-shadow: 0 5px 5px -5px;
 }
 
 .tabs form {
   margin-top: 15px;
 }
 
-.carsList dl {
-  margin-top: 0;
-  overflow: hidden;
+.collection-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: #eee;
 }
 
-.carsList dt,
-.carsList dd {
+.collection-item:last-child {
+  border-bottom: none;
+}
+
+.collection-item dl {
+  margin-top: 0;
+  overflow: hidden;
+  /* display: flex;
+  flex-wrap: wrap; */
+  font-size: 1.5rem;
+}
+
+.collection-item dt,
+.collection-item dd {
   float: left;
   margin-bottom: 5px;
 }
 
-.carsList dt {
+.collection-item dt {
   clear: left;
   font-weight: bold;
 }
@@ -47,6 +77,7 @@ header  h1 {
 
 .tab-display .controls {
   text-align: right;
+  margin-left: auto;
 }
 
 .collection:empty {

@@ -1,166 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Cars App</title>
-    <!-- Compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
-    />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <link rel="stylesheet" href="./styles/styles.css" />
-  </head>
-  <body>
-    <header>
-      <nav>
-        <div class="nav-wrapper">
-          <div class="container">
-            <h1>Cars App</h1>
-          </div>
-        </div>
-      </nav>
-    </header>
 
-    <div class="container tab-display">
-      <div class="row">
-        <div class="col s12">
-          <ul class="tabs">
-            <li class="tab col s4">
-              <a id="listTabTrigger" href="#listTab" class="active">List</a>
-            </li>
-            <li class="tab col s4">
-              <a id="addTabTrigger" href="#addTab">Add Car</a>
-            </li>
-            <li class="tab col s4 disabled">
-              <a id="updateTabTrigger" href="#updateTab">Update Car</a>
-            </li>
-          </ul>
-        </div>
-        <div id="listTab" class="col s12 tab-content">
-          <div id="carsList"></div>
-        </div>
-        <div id="addTab" class="col s12 tab-content">
-          <div class="row">
-            <form class="col s12" id="addForm" name="addForm">
-              <div class="row">
-                <div class="input-field col s12">
-                  <input
-                    placeholder="Name of car"
-                    name="name"
-                    id="name"
-                    type="text"
-                    class="validate"
-                    required
-                  >
-                  <label for="first_name">Name</label>
-                </div>
-                <div class="input-field col s12">
-                  <input
-                    id="bhp"
-                    type="number"
-                    class="validate"
-                    placeholder="bhp"
-                    name="bhp"
-                  >
-                  <label for="bhp">BHP</label>
-                </div>
-                <div class="input-field col s12">
-                    <input
-                      placeholder="Avatar URL"
-                      name="avatar_url"
-                      id="avatar"
-                      type="text"
-                      class="validate"
-                      required
-                    >
-                    <label for="avatar">Avatar</label>
-                    </div>
-                </div>
-              </div>
-              <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-                    <i class="material-icons right">send</i>
-                  </button>
-            </form>
-          </div>
-        </div>
-        <div id="updateTab" class="col s12 tab-content">
-            <div class="row">
-                <form class="col s12" id="updateForm" name="updateForm">
-                  <input type="hidden" name="id" id="id">
-                  <div class="row">
-                    <div class="input-field col s12">
-                      <input
-                        placeholder="Name of car"
-                        name="name"
-                        id="name"
-                        type="text"
-                        class="validate"
-                      />
-                      <label for="first_name">Name</label>
-                    </div>
-                    <div class="input-field col s12">
-                      <input id="bhp" type="number" class="validate" placeholder="bhp" name="bhp" />
-                      <label for="bhp">BHP</label>
-                    </div>
-                    <div class="input-field col s12">
-                        <input
-                            placeholder="Avatar URL"
-                            name="avatar_url"
-                            id="avatar"
-                            type="text"
-                            class="validate"
-                        />
-                        <label for="avatar">Avatar</label>
-                        </div>
-                    </div>
-                  </div>
-                  <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-                        <i class="material-icons right">send</i>
-                      </button>
-                </form>
-              </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" href="/favicon.ico?v=1.1">
+
+  <title>Cars App</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link rel="stylesheet" href="./styles/styles.css" />
+</head>
+
+<body>
+  <header>
+    <nav>
+      <div class="nav-wrapper">
+        <div class="container">
+          <h1>Cars App</h1>
         </div>
       </div>
-    </div>
+    </nav>
+  </header>
 
-    <!-- <script id="my_template" type="text/x-handlebars-template">
-      <div>
-        <ul id="carsList" class="collection carsList">
-            {{#each cars}}
-              <li class="collection-item avatar">
-                  <img src="{{avatar_url}}" alt="{{name}}" class="circle">
-                  <dl>
-                    <dt>Name: </dt>
-                    <dd class="title">{{name}}</dd>
-                    <dt>BHP: </dt>
-                    <dd>{{bhp}}</dd>
-                  </dl>
-                  <div class="controls">
-                    <button class="btn btn-info update" data-id="{{_id}}">
-                        <i class="material-icons left">edit</i>
-                        Edit
-                    </button>
-                    <button class="btn btn-info delete" data-id="{{_id}}">
-                        <i class="material-icons left">delete</i>
-                        Delete
-                    </button>
-                  </div>
-              </li>
-            {{/each}}
+  <div class="container tab-display">
+    <div class="row">
+      <div class="col s12">
+        <ul class="tabs">
+          <li class="tab col s4">
+            <a id="listTabTrigger" href="#listTab" class="active">List</a>
+          </li>
+          <li class="tab col s4">
+            <a id="addTabTrigger" href="#addTab">Add Car</a>
+          </li>
+          <li class="tab col s4 disabled">
+            <a id="updateTabTrigger" href="#updateTab">Update Car</a>
+          </li>
         </ul>
       </div>
-    </script> -->
+      <div id="listTab" class="col s12 tab-content">
+        <div id="carsList"></div>
+      </div>
+      <div id="addTab" class="col s12 tab-content">
+        <div class="row">
+          <form class="col s12" id="addForm" name="addForm">
+            <div class="row">
+              <div class="input-field col s12">
+                <input placeholder="Name of car" name="name" id="name" type="text" class="validate" required>
+                <label for="first_name">Name</label>
+              </div>
+              <div class="input-field col s12">
+                <input id="bhp" type="number" class="validate" placeholder="bhp" name="bhp">
+                <label for="bhp">BHP</label>
+              </div>
+              <div class="input-field col s12">
+                <input placeholder="Avatar URL" name="avatar_url" id="avatar_url" type="text" class="validate">
+                <label for="avatar_url">Avatar</label>
+              </div>
+            </div>
+        </div>
+        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+          <i class="material-icons right">send</i>
+        </button>
+        </form>
+      </div>
+    </div>
+    <div id="updateTab" class="col s12 tab-content">
+      <div class="row">
+        <form class="col s12" id="updateForm" name="updateForm">
+          <input type="hidden" name="id" id="id">
+          <div class="row">
+            <div class="input-field col s12">
+              <input placeholder="Name of car" name="name" id="name" type="text" class="validate">
+              <label for="first_name">Name</label>
+            </div>
+            <div class="input-field col s12">
+              <input id="bhp" type="number" class="validate" placeholder="bhp" name="bhp">
+              <label for="bhp">BHP</label>
+            </div>
+            <div class="input-field col s12">
+              <input placeholder="Avatar URL" name="avatar_url" id="avatar" type="text" class="validate">
+              <label for="avatar">Avatar</label>
+            </div>
+          </div>
+      </div>
+      <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+        <i class="material-icons right">send</i>
+      </button>
+      </form>
+    </div>
+  </div>
+  </div>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"></script>
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="./scripts/main.js"></script>
-  </body>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="./scripts/main.js"></script>
+</body>
+
 </html>
