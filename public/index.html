@@ -50,16 +50,17 @@
           <form class="col s12" id="addForm" name="addForm">
             <div class="row">
               <div class="input-field col s12">
-                <input placeholder="Name of car" name="name" id="name" type="text" class="validate" required>
-                <label for="first_name">Name</label>
+                <input placeholder="Bugatti Chiron" name="name" id="name" type="text" class="validate" required>
+                <label for="first_name">Name of car</label>
               </div>
               <div class="input-field col s12">
-                <input id="bhp" type="number" class="validate" placeholder="bhp" name="bhp">
-                <label for="bhp">BHP</label>
+                <input id="bhp" type="text" class="validate" placeholder="e.g. 1479 (Numbers only)" name="bhp"
+                  pattern="[0-9]{3,5}">
+                <label for="bhp">BHP <span class="sr-only">(Numbers only)</span></label>
               </div>
               <div class="input-field col s12">
                 <input placeholder="Avatar URL" name="avatar_url" id="avatar_url" type="text" class="validate">
-                <label for="avatar_url">Avatar</label>
+                <label for="avatar_url">Avatar URL (Optional)</label>
               </div>
             </div>
         </div>

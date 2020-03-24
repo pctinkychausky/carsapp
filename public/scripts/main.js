@@ -221,4 +221,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Running order
   loadCars();
+  if (!_cars.length) {
+    instance.select("addTab");
+  }
 });
