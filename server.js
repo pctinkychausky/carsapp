@@ -31,10 +31,10 @@ const promise = mongoose.connect(
 );
 
 promise
-  .then(function(db) {
+  .then(function (db) {
     console.log("DATABASE CONNECTED!!");
   })
-  .catch(function(err) {
+  .catch(function (err) {
     console.log("CONNECTION ERROR", err);
   });
 
@@ -42,16 +42,16 @@ const Schema = mongoose.Schema;
 const carSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   bhp: {
     type: Number,
-    required: true
+    required: true,
   },
   avatar_url: {
     type: String,
-    default: "https://static.thenounproject.com/png/449586-200.png"
-  }
+    default: "https://static.thenounproject.com/png/449586-200.png",
+  },
 });
 
 const Car = mongoose.model("Car", carSchema);
@@ -68,20 +68,31 @@ app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
   if (id) {
     query._id = id;
   }
-  Car.find(query).exec(function(err, cars) {
-    if (err) return res.status(500).send(err);
+  Car.find(query).exec(function (err, cars) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (id && !cars.length) return res.sendStatus(404);
     res.status(200).json(cars);
   });
 });
 
 app.post(`${fullAPIRoot}/cars`, (req, res) => {
-  var newCar = req.body;
-  console.log("newCar", newCar);
-  if (!newCar.avatar_url) {
-    delete newCar.avatar_url;
+  const { avatar_url, name, bhp } = req.body;
+  console.log("newCar", req.body);
+  if (!name) {
+    return res.status(400).send("NO_NAME");
   }
-  var car = new Car(newCar);
-  car.save(function(err, carModel) {
+  if (!bhp) {
+    return res.status(400).send("NO_BHP");
+  } else if (Number.isNaN(Number(bhp))) {
+    return res.status(400).send("BHP_NOT_A_NUMBER");
+  }
+  if (!avatar_url) {
+    delete req.body.avatar_url;
+  }
+  const car = new Car(req.body);
+  car.save(function (err, carModel) {
     if (err) {
       return res.status(500).send(err);
     }
@@ -90,25 +101,38 @@ app.post(`${fullAPIRoot}/cars`, (req, res) => {
 });
 
 app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
-  console.log(`Updating ${req.params.id}`, req.body);
-  Car.updateOne({ _id: req.params.id }, req.body, function(err, result) {
+  const updateData = req.body;
+  console.log(`Updating ${req.params.id}`, updateData);
+  // 400s for bad data
+  if (updateData.bhp && Number.isNaN(Number(updateData.bhp))) {
+    return res.status(400).send("BHP_NOT_A_NUMBER");
+  }
+  Car.updateOne({ _id: req.params.id }, updateData, function (err, result) {
     if (err) {
       return res.status(500).send(err);
     }
+    if (result.nModified === 0) return res.sendStatus(404);
     res.status(200).send(result);
   });
 });
 
 app.delete(`${fullAPIRoot}/cars/:id`, (req, res) => {
   console.log("carToBeDeleted", req.params.id);
-  Car.deleteOne({ _id: req.params.id }, function(err) {
+  Car.deleteOne({ _id: req.params.id }, function (err, result) {
     if (err) {
       return res.status(500).send(err);
     }
+    if (result.deletedCount === 0) return res.sendStatus(404);
+    console.log(result);
     res.sendStatus(204);
   });
 });
 
-app.listen(PORT, function() {
+// 404 Route
+app.all("*", (req, res) => {
+  res.sendStatus(404);
+});
+
+app.listen(PORT, function () {
   console.log(`Listening on ${PORT}`);
 });
