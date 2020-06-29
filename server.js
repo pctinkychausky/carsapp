@@ -24,23 +24,51 @@ app.use(bodyParser.json());
 // enable cors
 app.use(cors());
 
-// TODO! Remove
-const cars = [];
-
 // TODO: Connect Database
+// mongoose.Promise = global.Promise;
+mongoose
+  .connect("mongodb://localhost:27017/cars", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(function () {
+    console.log("DB Connected");
+  })
+  .catch(function (error) {
+    console.log("Error connecting to DB", error);
+  });
 
 // TODO: Define a car schema and model
+const { Schema } = mongoose;
+const carSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  bhp: {
+    type: Number,
+    required: true,
+  },
+  avatar_url: {
+    type: String,
+    default: "https://static.thenounproject.com/png/449586-200.png",
+  },
+});
+
+const Car = mongoose.model("Car", carSchema);
 
 //TODO: Create a read (GET) route
 
 app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
-  var query = {};
-  var id = req.params.id;
-  let data = cars;
-  if (id) {
-    data = cars.find((car) => id === car.id);
+  let query = {};
+  const { id } = req.params;
+  if(id) {
+    query._id = id;
   }
-  return res.status(200).json(data);
+  Car.find(query).exec(function (err, cars) {
+    if (err) return res.status(500).send(err);
+    return res.status(200).send(cars);
+  });
 });
 
 // GET /cars - get all the cars
@@ -52,17 +80,41 @@ app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
 
 //TODO: Create a create (POST) route
 app.post(`${fullAPIRoot}/cars/`, (req, res) => {
-  const newCar = {
-    id: cars.length,
-    ...req.body,
-  };
-  cars.push(newCar);
-  return res.status(201).json(newCar);
+  const carData = req.body;
+  const car = new Car(req.body);
+  car.save(function (err, newCar) {
+    if (err) return res.status(500).send(err);
+    return res.status(201).send(newCar);
+  });
 });
 
 //TODO: Create a update (PUT) route
+app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
+  const updateData = req.body;
+  console.log(`Updating ${req.params.id}`, updateData);
+
+  Car.updateOne({ _id: req.params.id }, updateData, function (err, result) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    console.log('result', result);
+    if (result.nModified === 0) return res.sendStatus(404);
+    res.status(200).send(result);
+  });
+});
 
 //TODO: Create a delete (DELETE) route
+app.delete(`${fullAPIRoot}/cars/:id`, (req, res) => {
+  console.log("carToBeDeleted", req.params.id);
+  Car.deleteOne({ _id: req.params.id }, function (err, result) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (result.deletedCount === 0) return res.sendStatus(404);
+    console.log(result);
+    res.sendStatus(204);
+  });
+});
 
 // 404 Route
 app.all("*", (req, res) => {
