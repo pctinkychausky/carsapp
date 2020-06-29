@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   // Instantiate Tabs
   const tabs = document.querySelector(".tabs");
   const instance = M.Tabs.init(tabs, {});
@@ -23,11 +23,11 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch(`${fullAPIRoot}/cars`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     })
-      .then(resp => resp.json())
-      .then(cars => {
+      .then((resp) => resp.json())
+      .then((cars) => {
         _cars = cars;
         console.log("cars", cars);
         handler(cars);
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
     M.updateTextFields();
   }
 
-  listNode.addEventListener("click", function(e) {
+  listNode.addEventListener("click", function (e) {
     const target = e.target;
     if (target) {
       if (target.matches("button.update")) {
@@ -117,21 +117,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function deleteCar(id) {
     fetch(`${fullAPIRoot}/cars/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     })
-      .then(resp => {
+      .then((resp) => {
         console.log("resp", resp);
         M.toast({ html: "Car Deleted!", classes: "success" });
         loadCars();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("err", err);
         M.toast({ html: `Error: ${err.message}`, classes: "error" });
       });
   }
 
   const updateForm = document.getElementById("updateForm");
-  updateForm.addEventListener("submit", function(e) {
+  updateForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
     const data = getFormData(updateForm);
@@ -141,17 +141,17 @@ document.addEventListener("DOMContentLoaded", function() {
       method: "PUT",
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     })
       // .then(resp => resp.json())
-      .then(cars => {
+      .then((cars) => {
         this.reset();
         M.toast({ html: "Car Updated!", classes: "success" });
         reloadList();
         updateTabTrigger.parentNode.classList.add("disabled");
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(error);
         M.toast({ html: `Error: ${err.message}`, classes: "error" });
       });
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function() {
     instance.select("updateTab");
 
     // Find car by Id
-    const carToBeUpdated = _cars.find(car => {
+    const carToBeUpdated = _cars.find((car) => {
       console.log(car._id, id);
       return car._id === id;
     });
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Add FORM
   const addForm = document.getElementById("addForm");
-  addForm.addEventListener("submit", function(e) {
+  addForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
     // Get the data from the form
@@ -194,16 +194,16 @@ document.addEventListener("DOMContentLoaded", function() {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     })
       // .then(resp => resp.json())
-      .then(cars => {
+      .then((cars) => {
         addForm.reset();
         M.toast({ html: "Car Saved!", classes: "success" });
         reloadList();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(error);
         M.toast({ html: `Error: ${err.message}`, classes: "error" });
       });
@@ -221,7 +221,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Running order
   loadCars();
-  if (!_cars.length) {
-    instance.select("addTab");
-  }
 });
