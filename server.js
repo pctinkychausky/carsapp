@@ -84,6 +84,13 @@ app.post(`${fullAPIRoot}/cars/`, (req, res) => {
   if (carData.avatar_url === "") {
     delete carData.avatar_url;
   }
+  if(!carData.name) {
+    return res.status(400).send('NO_NAME_PROVIDED');
+  }
+
+  if(!carData.bhp) {
+    return res.status(400).send('NO_BHP_PROVIDED');
+  }
   const car = new Car(carData);
   car.save(function (err, newCar) {
     if (err) return res.status(500).send(err);
