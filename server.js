@@ -27,7 +27,7 @@ app.use(cors());
 // TODO: Connect Database
 // mongoose.Promise = global.Promise;
 mongoose
-  .connect("mongodb://localhost:27017/cars", {
+  .connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -62,7 +62,7 @@ const Car = mongoose.model("Car", carSchema);
 app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
   let query = {};
   const { id } = req.params;
-  if(id) {
+  if (id) {
     query._id = id;
   }
   Car.find(query).exec(function (err, cars) {
@@ -97,7 +97,7 @@ app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    console.log('result', result);
+    console.log("result", result);
     if (result.nModified === 0) return res.sendStatus(404);
     res.status(200).send(result);
   });
