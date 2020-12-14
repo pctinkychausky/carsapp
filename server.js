@@ -77,6 +77,14 @@ app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
 
 // /cars
 // /cars/78asd6f8s6d9
+app.options('*', function(req, res, next){
+  res.set('Allow', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.send('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
+});
+
+app.head('*', function(req, res, next){
+  res.status(200).send(req.headers);
+});
 
 //TODO: Create a create (POST) route
 app.post(`${fullAPIRoot}/cars/`, (req, res) => {
