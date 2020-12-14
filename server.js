@@ -81,7 +81,10 @@ app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
 //TODO: Create a create (POST) route
 app.post(`${fullAPIRoot}/cars/`, (req, res) => {
   const carData = req.body;
-  const car = new Car(req.body);
+  if (carData.avatar_url === "") {
+    delete carData.avatar_url;
+  }
+  const car = new Car(carData);
   car.save(function (err, newCar) {
     if (err) return res.status(500).send(err);
     return res.status(201).send(newCar);
