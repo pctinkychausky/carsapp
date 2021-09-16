@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyParser = require("body-parser");
+const { body, validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
@@ -8,18 +8,16 @@ const apiRoot = "/api/";
 const version = "v1";
 const fullAPIRoot = apiRoot + version;
 
-const {
-  PORT = 3333,
-  MONGODB_URI = "mongodb://localhost/cars_jump",
-} = process.env;
+const { PORT = 3333, MONGODB_URI = "mongodb://localhost/cars_jump" } =
+  process.env;
 
 app.use(express.static("public"));
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json());
+app.use(express.json());
 
 // enable cors
 app.use(cors());
@@ -57,7 +55,26 @@ const carSchema = new Schema({
 
 const Car = mongoose.model("Car", carSchema);
 
-//TODO: Create a read (GET) route
+const driverSchema = new Schema({
+  firstname: {
+    type: String,
+    required: true,
+  },
+  lastname: {
+    type: String,
+    required: true,
+  },
+  age: {
+    type: Number,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+});
+
+const Driver = mongoose.model("Driver", driverSchema);
 
 app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
   let query = {};
@@ -71,33 +88,17 @@ app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
   });
 });
 
-// GET /cars - get all the cars
-//--- /cars/Bugatti%20Veyron <-- other ways of doing it
-// GET /cars/:id
-
-// /cars
-// /cars/78asd6f8s6d9
-app.options('*', function(req, res, next){
-  res.set('Allow', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.send('Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD');
-});
-
-app.head('*', function(req, res, next){
-  res.status(200).send(req.headers);
-});
-
-//TODO: Create a create (POST) route
 app.post(`${fullAPIRoot}/cars/`, (req, res) => {
   const carData = req.body;
   if (carData.avatar_url === "") {
     delete carData.avatar_url;
   }
-  if(!carData.name) {
-    return res.status(400).send('NO_NAME_PROVIDED');
+  if (!carData.name) {
+    return res.status(400).send("NO_NAME_PROVIDED");
   }
 
-  if(!carData.bhp) {
-    return res.status(400).send('NO_BHP_PROVIDED');
+  if (!carData.bhp) {
+    return res.status(400).send("NO_BHP_PROVIDED");
   }
   const car = new Car(carData);
   car.save(function (err, newCar) {
@@ -106,7 +107,6 @@ app.post(`${fullAPIRoot}/cars/`, (req, res) => {
   });
 });
 
-//TODO: Create a update (PUT) route
 app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
   const updateData = req.body;
   console.log(`Updating ${req.params.id}`, updateData);
@@ -121,10 +121,86 @@ app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
   });
 });
 
-//TODO: Create a delete (DELETE) route
 app.delete(`${fullAPIRoot}/cars/:id`, (req, res) => {
   console.log("carToBeDeleted", req.params.id);
   Car.deleteOne({ _id: req.params.id }, function (err, result) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (result.deletedCount === 0) return res.sendStatus(404);
+    console.log(result);
+    res.sendStatus(204);
+  });
+});
+
+// ******************* DRIVERS **********************//
+app.get(`${fullAPIRoot}/drivers/:id?`, (req, res) => {
+  let query = {};
+  const { id } = req.params;
+  if (id) {
+    query._id = id;
+  }
+  Driver.find(query).exec(function (err, drivers) {
+    if (err) return res.status(500).send(err);
+    return res.status(200).send(drivers);
+  });
+});
+
+app.post(`${fullAPIRoot}/drivers/`, body("email").isEmail(), (req, res) => {
+  const driverData = req.body;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  if (!driverData.firstname) {
+    return res.status(400).send("NO_FIRSTNAME_PROVIDED");
+  }
+  if (!driverData.lastname) {
+    return res.status(400).send("NO_LASTNAME_PROVIDED");
+  }
+
+  if (!driverData.age) {
+    return res.status(400).send("NO_AGE_PROVIDED");
+  }
+  const driver = new Driver(driverData);
+  driver.save(function (err, newDriver) {
+    if (err) return res.status(500).send(err);
+    return res.status(201).send(newDriver);
+  });
+});
+
+app.put(
+  `${fullAPIRoot}/drivers/:id`,
+  body("email").isEmail().optional(),
+  (req, res) => {
+    const updateData = req.body;
+    console.log(`Updating ${req.params.id}`, updateData);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    Driver.updateOne(
+      { _id: req.params.id },
+      updateData,
+      function (err, result) {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        console.log("result", result);
+        if (result.nModified === 0) return res.sendStatus(404);
+        res.status(200).send(result);
+      }
+    );
+  }
+);
+
+app.delete(`${fullAPIRoot}/drivers/:id`, (req, res) => {
+  console.log("driverToBeDeleted", req.params.id);
+  Driver.deleteOne({ _id: req.params.id }, function (err, result) {
     if (err) {
       return res.status(500).send(err);
     }
