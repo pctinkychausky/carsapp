@@ -116,7 +116,7 @@ app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
       return res.status(500).send(err);
     }
     console.log("result", result);
-    if (result.nModified === 0) return res.sendStatus(404);
+    if (result.n === 0) return res.sendStatus(404);
     res.status(200).send(result);
   });
 });
@@ -191,7 +191,7 @@ app.put(
           return res.status(500).send(err);
         }
         console.log("result", result);
-        if (result.nModified === 0) return res.sendStatus(404);
+        if (result.n === 0) return res.sendStatus(404);
         res.status(200).send(result);
       }
     );
