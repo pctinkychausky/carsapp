@@ -111,7 +111,11 @@ app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
   const updateData = req.body;
   console.log(`Updating ${req.params.id}`, updateData);
 
-  if (!req.body) {
+  const isEmpty = req.body // 👈 null and undefined check
+  && Object.keys(req.body).length === 0
+  && Object.getPrototypeOf(req.body) === Object.prototype
+
+  if (isEmpty) {
     return res.status(400).send("No update data provided");
   }
 
