@@ -111,6 +111,10 @@ app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
   const updateData = req.body;
   console.log(`Updating ${req.params.id}`, updateData);
 
+  if (!req.body) {
+    return res.status(400).send("No update data provided");
+  }
+
   Car.updateOne({ _id: req.params.id }, updateData, function (err, result) {
     if (err) {
       return res.status(500).send(err);
