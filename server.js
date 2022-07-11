@@ -90,9 +90,11 @@ app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
 
 app.post(`${fullAPIRoot}/cars/`, (req, res) => {
   const carData = req.body;
-  if (carData.avatar_url === "") {
-    delete carData.avatar_url;
-  }
+
+  if (carData.avatar_url.startsWith('data:image')) {
+    return res.status(400).send("NO_DATA_URIS_FOR_AVATAR");
+  } 
+
   if (!carData.name) {
     return res.status(400).send("NO_NAME_PROVIDED");
   }
@@ -100,6 +102,11 @@ app.post(`${fullAPIRoot}/cars/`, (req, res) => {
   if (!carData.bhp) {
     return res.status(400).send("NO_BHP_PROVIDED");
   }
+
+  if (carData.avatar_url === "") {
+    delete carData.avatar_url;
+  } 
+
   const car = new Car(carData);
   car.save(function (err, newCar) {
     if (err) return res.status(500).send(err);
